@@ -183,37 +183,39 @@ public class Ventana extends javax.swing.JFrame implements Observer{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //Metodo que maneja las funciones de la caja de texto "enviar"
     private void envio_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_txtActionPerformed
 
     }
-
+    //Metodo que maneja las funciones de la caja de texto "Ip destino"
     private void ip_destinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ip_destinoActionPerformed
 
     }
-
+    //Metodo que maneja las funciones de la caja de texto "host"
     private void hostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hostActionPerformed
 
     }
+    //Metodo que maneja las funciones del boton Iniciar Conversacion
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
-        Servidor servidor = new Servidor(puerto_propio);
+        int puerto_propio = Integer.parseInt(this.puerto_salida.getText()); //Convierte el texto en un puerto leible por el socket
+        Servidor servidor = new Servidor(puerto_propio); //Crea una instancia de la clase Servidor
 
-        servidor.addObserver((Observer) this);
-        Thread servidor_hilo = new Thread(servidor);
-        servidor_hilo.start();
+        servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
+        Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
+        servidor_hilo.start();//Inicia el hilo
 
 
     }
 
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
+        //Se crea la variable que sera usada para enviar los mensajes, obteniendo el usuario y el texto que se quiere enviar
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
-        int puerto_destino = Integer.parseInt(this.puerto_destino.getText());
-        this.chat_txt.append(mensaje);
+        int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
+        this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
 
-        Cliente usuario = new Cliente(puerto_destino, mensaje);
-        Thread usuario_hilo = new Thread(usuario);
-        usuario_hilo.start();
+        Cliente usuario = new Cliente(puerto_destino, mensaje); //Se crea una instancia de la clase cliente
+        Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
+        usuario_hilo.start();//Se inicia el hilo
     }
 
     /**
