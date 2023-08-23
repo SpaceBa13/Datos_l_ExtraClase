@@ -4,11 +4,14 @@
  */
 package com.mycompany.datosextraclase;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  *
  * @author SpaceBa
  */
-public class Ventana extends javax.swing.JFrame {
+public class Ventana extends javax.swing.JFrame implements Observer{
 
     public Ventana() {
         initComponents();
@@ -196,7 +199,7 @@ public class Ventana extends javax.swing.JFrame {
         int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
         Servidor servidor = new Servidor(puerto_propio);
 
-        servidor.addObserver(this);
+        servidor.addObserver((Observer) this);
         Thread servidor_hilo = new Thread(servidor);
         servidor_hilo.start();
 
@@ -257,5 +260,10 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JTextField puerto_destino;
     private javax.swing.JTextField puerto_salida;
     private javax.swing.JTextField user;
+
+    @Override
+    public void update(Observable o, Object arg) {
+        this.chat_txt.append((String) arg);
+    }
     // End of variables declaration//GEN-END:variables
 }
