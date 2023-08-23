@@ -21,7 +21,7 @@ public class Cliente implements Runnable{
         this.mensaje = mensaje;
     }
 
-    //Se utiliza el metodo Run
+    //Se utiliza el metodo run para los hilos
     @Override
     public void run() {
         //Se definen las variables que se van a utilizar para el socket
