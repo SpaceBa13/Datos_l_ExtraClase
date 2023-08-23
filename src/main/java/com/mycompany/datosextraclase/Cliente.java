@@ -1,7 +1,6 @@
 package com.mycompany.datosextraclase;
 
 import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +16,7 @@ public class Cliente implements Runnable{
     public Cliente(int puerto, String mensaje){
         this.puerto = puerto;
         this.mensaje = mensaje;
+
     }
 
 
