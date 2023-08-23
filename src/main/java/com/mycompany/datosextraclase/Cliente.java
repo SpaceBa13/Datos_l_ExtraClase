@@ -16,7 +16,6 @@ public class Cliente implements Runnable{
     public Cliente(int puerto, String mensaje){
         this.puerto = puerto;
         this.mensaje = mensaje;
-
     }
 
 
