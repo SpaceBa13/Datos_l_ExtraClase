@@ -193,6 +193,13 @@ public class Ventana extends javax.swing.JFrame {
 
     }
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
+        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
+        Servidor servidor = new Servidor(puerto_propio);
+
+        servidor.addObserver(this);
+        Thread servidor_hilo = new Thread(servidor);
+        servidor_hilo.start();
+
 
     }
 
