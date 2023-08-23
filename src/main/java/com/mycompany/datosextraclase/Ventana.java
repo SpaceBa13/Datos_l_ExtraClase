@@ -200,6 +200,10 @@ public class Ventana extends javax.swing.JFrame {
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText());
         this.chat_txt.append(mensaje);
+
+        Cliente usuario = new Cliente(puerto_destino, mensaje);
+        Thread usuario_hilo = new Thread(usuario);
+        usuario_hilo.start();
     }
 
     /**
