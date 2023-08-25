@@ -2,6 +2,7 @@ package com.mycompany.datosextraclase;
 
 import java.io.DataOutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,11 +23,13 @@ public class Cliente implements Runnable{
         this.mensaje = mensaje;
         this.puerto = puerto;
     }
+    public void agregar(){
+
+    }
 
     public int Obtener_puerto(){
         return this.puerto;
     }
-
     //Se utiliza el metodo run para los hilos
     @Override
     public void run() {
@@ -37,6 +40,7 @@ public class Cliente implements Runnable{
             Socket socket_c = new Socket(IP, puerto_destino); //Creacion del Socket
             envio = new DataOutputStream(socket_c.getOutputStream()); //Definicion de envio como parte del socket
             envio.writeUTF(mensaje); //Se escribe el mensaje en el Socket
+            envio.writeUTF(String.valueOf(puerto)); //Se escribe el mensaje en el Socket
             socket_c.close(); //Se cierra el socket
 
         }catch (Exception ex){

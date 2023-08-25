@@ -7,6 +7,7 @@ package com.mycompany.datosextraclase;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 /**
  *
@@ -14,7 +15,6 @@ import java.util.Observer;
  */
 public class Ventana extends javax.swing.JFrame implements Observer{
     LinkedList Clientes = new LinkedList();
-
     public void verify(Object puerto){
         if (Clientes.size() == 0){
             Clientes.add(puerto);
@@ -40,9 +40,9 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
         int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
         this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
-        verify(puerto_propio);
+        verify(puerto_destino);
         for (int i = 0; i < Clientes.size(); i++) {
-            Cliente usuario = new Cliente(puerto_destino, mensaje, Integer.parseInt(Clientes.get(i).toString())); //Se crea una instancia de la clase cliente
+            Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje, puerto_propio); //Se crea una instancia de la clase cliente
             Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
             usuario_hilo.start();//Se inicia el hilo
             System.out.println("Mensaje enviado al puerto: " + Clientes.get(i));
@@ -50,6 +50,15 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     }
     public Ventana() {
         initComponents();
+        Random puerto = new Random();
+        int puerto_salida = puerto.nextInt(5000, 10000);
+        Servidor servidor = new Servidor(puerto_salida); //Crea una instancia de la clase Servidor
+        this.chat_txt.append("Puerto: " + String.valueOf(puerto_salida) + "\n"); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+
+        servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
+        Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
+        servidor_hilo.start();//Inicia el hilo
+
         this.getRootPane().setDefaultButton(this.envio_boton);
     }
 
@@ -232,14 +241,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     }
     //Metodo que maneja las funciones del boton Iniciar Conversacion
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
-        int puerto_propio = Integer.parseInt(this.puerto_salida.getText()); //Convierte el texto en un puerto leible por el socket
-        Servidor servidor = new Servidor(puerto_propio); //Crea una instancia de la clase Servidor
-
-        servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
-        Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
-        servidor_hilo.start();//Inicia el hilo
-
-
     }
 
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
@@ -251,6 +252,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -272,6 +274,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
             public void run() {
                 new Ventana().setVisible(true);
             }
+
         });
     }
 

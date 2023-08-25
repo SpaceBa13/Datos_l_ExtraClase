@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 public class Servidor extends Observable implements Runnable{
     //Definicion de los atributos
+
     int puerto;
 
     //Constructor
@@ -18,7 +19,6 @@ public class Servidor extends Observable implements Runnable{
         this.puerto = puerto;
     }
 
-    LinkedList lista_Clientes = new LinkedList();
 
     public void add_client(int puerto){
 
@@ -36,10 +36,13 @@ public class Servidor extends Observable implements Runnable{
             servidor = new ServerSocket(puerto); //inicia el servidor
             while(true){ //Mantiene el socket activo
                 cliente = servidor.accept(); //acepta la coneccion del usuario al Socket servidor
+                System.out.println(cliente);
                 System.out.println("Cliente Conectado");
                 System.out.println("Servidor ; " + cliente.getLocalPort());
                 recibir = new DataInputStream(cliente.getInputStream());  //Se define como la variable que va recibir los datos del socket
                 mensaje = recibir.readUTF(); //define la variable como la lectura de los datos del socket
+
+
                 this.setChanged(); //Marca como modificado al objeto
                 this.notifyObservers(mensaje); //Notifica a los observadores que hubo un cambio en la variable mensaje
                 this.clearChanged(); //Indica que ya no hay mas cambios
