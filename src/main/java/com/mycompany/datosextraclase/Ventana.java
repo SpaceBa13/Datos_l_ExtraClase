@@ -4,6 +4,8 @@
  */
 package com.mycompany.datosextraclase;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -62,7 +64,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Puerto Salida");
 
-        puerto_salida.setText("0");
+        puerto_salida.setText("49667");
 
         host.setText("0");
         host.addActionListener(new java.awt.event.ActionListener() {
@@ -203,11 +205,22 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
         Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
         servidor_hilo.start();//Inicia el hilo
-
-
     }
 
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
+        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
+        boolean puertoSalidaAbierto = false; // Verificar si el puerto de salida está abierto
+        try {
+            ServerSocket testSocket = new ServerSocket(puerto_propio);
+            testSocket.close();
+            puertoSalidaAbierto = true;
+        } catch (IOException e) {
+            puertoSalidaAbierto = false; // El puerto no está abierto
+        }
+        if (puertoSalidaAbierto) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El puerto de salida no está disponible.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         //Se crea la variable que sera usada para enviar los mensajes, obteniendo el usuario y el texto que se quiere enviar
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
@@ -216,6 +229,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         Cliente usuario = new Cliente(puerto_destino, mensaje); //Se crea una instancia de la clase cliente
         Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
         usuario_hilo.start();//Se inicia el hilo
+        envio_txt.setText("");//Limpia lo escrito 
     }
 
     /**
