@@ -4,6 +4,7 @@
  */
 package com.mycompany.datosextraclase;
 
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,7 +13,41 @@ import java.util.Observer;
  * @author SpaceBa
  */
 public class Ventana extends javax.swing.JFrame implements Observer{
+    LinkedList Clientes = new LinkedList();
 
+    public void verify(Object puerto){
+        if (Clientes.size() == 0){
+            Clientes.add(puerto);
+        }else{
+            for (int i = 0; i < Clientes.size(); i++) {
+                if(i == Clientes.size() - 1) {
+                    if (Clientes.get(i).equals(puerto)) {
+                        break;
+                    }else{
+                        Clientes.add(puerto);
+                    }
+                }else{
+                    if (Clientes.get(i).equals(puerto)) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void enviar(){
+        String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
+        int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
+        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
+        this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+        verify(puerto_propio);
+        for (int i = 0; i < Clientes.size(); i++) {
+            Cliente usuario = new Cliente(puerto_destino, mensaje, Integer.parseInt(Clientes.get(i).toString())); //Se crea una instancia de la clase cliente
+            Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
+            usuario_hilo.start();//Se inicia el hilo
+            System.out.println("Mensaje enviado al puerto: " + Clientes.get(i));
+        }
+    }
     public Ventana() {
         initComponents();
         this.getRootPane().setDefaultButton(this.envio_boton);
@@ -208,14 +243,8 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     }
 
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
-        //Se crea la variable que sera usada para enviar los mensajes, obteniendo el usuario y el texto que se quiere enviar
-        String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
-        int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
-        this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+        enviar();
 
-        Cliente usuario = new Cliente(puerto_destino, mensaje); //Se crea una instancia de la clase cliente
-        Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
-        usuario_hilo.start();//Se inicia el hilo
     }
 
     /**

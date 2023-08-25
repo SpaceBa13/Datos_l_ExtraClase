@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,9 +12,16 @@ import java.util.logging.Logger;
 public class Servidor extends Observable implements Runnable{
     //Definicion de los atributos
     int puerto;
+
     //Constructor
     public Servidor(int puerto){
         this.puerto = puerto;
+    }
+
+    LinkedList lista_Clientes = new LinkedList();
+
+    public void add_client(int puerto){
+
     }
 
     //Se utiliza el metodo run para los hilos
@@ -28,9 +36,10 @@ public class Servidor extends Observable implements Runnable{
             servidor = new ServerSocket(puerto); //inicia el servidor
             while(true){ //Mantiene el socket activo
                 cliente = servidor.accept(); //acepta la coneccion del usuario al Socket servidor
+                System.out.println("Cliente Conectado");
+                System.out.println("Servidor ; " + cliente.getLocalPort());
                 recibir = new DataInputStream(cliente.getInputStream());  //Se define como la variable que va recibir los datos del socket
                 mensaje = recibir.readUTF(); //define la variable como la lectura de los datos del socket
-
                 this.setChanged(); //Marca como modificado al objeto
                 this.notifyObservers(mensaje); //Notifica a los observadores que hubo un cambio en la variable mensaje
                 this.clearChanged(); //Indica que ya no hay mas cambios
