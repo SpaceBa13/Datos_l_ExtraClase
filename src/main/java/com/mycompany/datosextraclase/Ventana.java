@@ -10,11 +10,19 @@ import java.util.Observer;
 import java.util.Random;
 
 /**
- *
+ *Ventana sera la interfaz que utilizara el usuario durante la ejeccion del programa
  * @author SpaceBa
  */
 public class Ventana extends javax.swing.JFrame implements Observer{
+    /**
+     * Representa los clientes que se han registrado en el servidor
+     */
     LinkedList Clientes = new LinkedList();
+
+    /**
+     * agrega un puerto no registrado en el servidor y verifica que no esten repetidos
+     * @param puerto es el puerto que se va a agregar y verificar
+     */
     public void verify(Object puerto){
         if (Clientes.size() == 0){
             Clientes.add(puerto);
@@ -35,24 +43,32 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         }
     }
 
+    /**
+     * Crea una instancia del objeto cliente para enviar un mensaje por cada puerto resgistrado en el servidor
+     * imprime en el espacio de texto el usuario y el mensaje que se envio
+     */
     public void enviar(){
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
         this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
         verify(puerto_destino);
         for (int i = 0; i < Clientes.size(); i++) {
-            Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje); //Se crea una instancia de la clase cliente
+            Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje, this.host.getText()); //Se crea una instancia de la clase cliente
             Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
             usuario_hilo.start();//Se inicia el hilo
-            System.out.println("Mensaje enviado al puerto: " + Clientes.get(i));
         }
     }
+
+    /**
+     * llama al metodo initComponents y crea una instancia de la clase servidor
+     * Inicia un hilo con la clase servidor para mantenerlo activo
+     */
     public Ventana() {
         initComponents();
         Random puerto = new Random();
-        int puerto_salida = puerto.nextInt(5000, 10000);
+        int puerto_salida = puerto.nextInt(5000, 20000);
         Servidor servidor = new Servidor(puerto_salida); //Crea una instancia de la clase Servidor
-        this.chat_txt.append("Puerto: " + String.valueOf(puerto_salida) + "\n"); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+        this.chat_txt.append("--Servidor Iniciado--" + "\n" + "Puerto: " + String.valueOf(puerto_salida) + "\n"); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
 
         servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
         Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
@@ -61,6 +77,9 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         this.getRootPane().setDefaultButton(this.envio_boton);
     }
 
+    /**
+     * Inicia los componentes de la interfaz grafica
+     */
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
@@ -82,7 +101,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
 
         envio_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                envio_txtActionPerformed(evt);
             }
         });
 
@@ -115,6 +133,8 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         jLabel4.setText("Host");
 
         puerto_destino.setText("0");
+
+        host.setText("127.0.0.1");
 
         ip_destino.setText("127.0.0.1");
         ip_destino.addActionListener(new java.awt.event.ActionListener() {
@@ -214,24 +234,31 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         pack();
     }// </editor-fold>//GEN-END:initComponents
     //Metodo que maneja las funciones de la caja de texto "enviar"
-    private void envio_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_txtActionPerformed
 
-    }
     //Metodo que maneja las funciones de la caja de texto "Ip destino"
     private void ip_destinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ip_destinoActionPerformed
 
     }
-    //Metodo que maneja las funciones de la caja de texto "host"
+    /**
+     * Metodo que maneja las funciones de la caja de texto "host"
+     * @param evt
+     */
     private void hostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hostActionPerformed
 
     }
-    //Metodo que maneja las funciones del boton Iniciar Conversacion
+    /**
+     * Recibe como parametro un click del usuario
+     * @param evt
+     */
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
     }
 
+    /**
+     * Recibe como parametro un click del usuario y llama a la funcion enviar
+     * @param evt
+     */
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
         enviar();
-
     }
 
     /**
@@ -280,6 +307,12 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     private javax.swing.JTextField puerto_destino;
     private javax.swing.JTextField user;
 
+    /**
+     * Actualiza los datos recogidos por los observables
+     * @param o     the observable object.
+     * @param arg   an argument passed to the {@code notifyObservers}
+     *                 method.
+     */
     @Override
     public void update(Observable o, Object arg) {
         this.chat_txt.append((String) arg);
