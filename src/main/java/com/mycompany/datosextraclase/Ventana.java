@@ -68,7 +68,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         Random puerto = new Random();
         int puerto_salida = puerto.nextInt(5000, 20000);
         Servidor servidor = new Servidor(puerto_salida); //Crea una instancia de la clase Servidor
-        this.chat_txt.append("-Servidor Iniciado-" + "\n" + "Puerto: " + String.valueOf(puerto_salida) + "\n"); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+        this.chat_txt.append("--Servidor Iniciado--" + "\n" + "Puerto: " + String.valueOf(puerto_salida) + "\n"); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
 
         servidor.addObserver((Observer) this); //Se anade un observer apuntado a la instancia creada anteriormente
         Thread servidor_hilo = new Thread(servidor);//Crea un hilo para su ejeccucion
