@@ -9,31 +9,34 @@ import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/** Servidor representa un espacio en el cual pueden conectarse usuarios
+ *
+ * @author SpaceBa
+ */
 public class Servidor extends Observable implements Runnable{
     //Definicion de los atributos
 
-    int puerto;
+    private int puerto;
 
-    //Constructor
+    /**
+     * Crea un servidor recibiendo como parametro el puerto que va a utlizar
+     * @param puerto
+     */
     public Servidor(int puerto){
         this.puerto = puerto;
     }
 
-
-    //Se utiliza el metodo run para los hilos
+    /**
+     *Mantiene la instancia en ejecuccion
+     */
     @Override
     public void run() {
-        ServerSocket servidor = null;   //Se define el Socket Servidor
-        Socket cliente = null;    //Se define el Socket cliente
-        DataInputStream recibir;    //Se define la variable para recibir los datos del Socket
-        String mensaje;         //Variable para el envio de los mensajes
-
         try{
-            servidor = new ServerSocket(puerto); //inicia el servidor
+            ServerSocket servidor = new ServerSocket(puerto); //inicia el servidor
             while(true){ //Mantiene el socket activo
-                cliente = servidor.accept(); //acepta la coneccion del usuario al Socket servidor
-                recibir = new DataInputStream(cliente.getInputStream());  //Se define como la variable que va recibir los datos del socket
-                mensaje = recibir.readUTF(); //define la variable como la lectura de los datos del socket
+                Socket cliente = servidor.accept(); //acepta la coneccion del usuario al Socket servidor
+                DataInputStream recibir = new DataInputStream(cliente.getInputStream());  //Se define como la variable que va recibir los datos del socket
+                String mensaje = recibir.readUTF(); //define la variable como la lectura de los datos del socket
 
                 this.setChanged(); //Marca como modificado al objeto
                 this.notifyObservers(mensaje); //Notifica a los observadores que hubo un cambio en la variable mensaje

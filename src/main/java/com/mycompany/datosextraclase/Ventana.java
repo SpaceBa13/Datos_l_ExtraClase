@@ -10,11 +10,19 @@ import java.util.Observer;
 import java.util.Random;
 
 /**
- *
+ *Ventana sera la interfaz que utilizara el usuario durante la ejeccion del programa
  * @author SpaceBa
  */
 public class Ventana extends javax.swing.JFrame implements Observer{
+    /**
+     * Representa los clientes que se han registrado en el servidor
+     */
     LinkedList Clientes = new LinkedList();
+
+    /**
+     * agrega un puerto no registrado en el servidor y verifica que no esten repetidos
+     * @param puerto es el puerto que se va a agregar y verificar
+     */
     public void verify(Object puerto){
         if (Clientes.size() == 0){
             Clientes.add(puerto);
@@ -35,6 +43,10 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         }
     }
 
+    /**
+     * Crea una instancia del objeto cliente para enviar un mensaje por cada puerto resgistrado en el servidor
+     * imprime en el espacio de texto el usuario y el mensaje que se envio
+     */
     public void enviar(){
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
@@ -44,9 +56,13 @@ public class Ventana extends javax.swing.JFrame implements Observer{
             Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje); //Se crea una instancia de la clase cliente
             Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
             usuario_hilo.start();//Se inicia el hilo
-            System.out.println("Mensaje enviado al puerto: " + Clientes.get(i));
         }
     }
+
+    /**
+     * Inicia los componentes de la interfaz grafica y crea una instancia de la clase servidor
+     * Inicia un hilo con la clase servidor para mantenerlo activo
+     */
     public Ventana() {
         initComponents();
         Random puerto = new Random();
@@ -225,13 +241,19 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     private void hostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hostActionPerformed
 
     }
-    //Metodo que maneja las funciones del boton Iniciar Conversacion
+    /**
+     * Recibe como parametro un click del usuario
+     * @param evt
+     */
     private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
     }
 
+    /**
+     * Recibe como parametro un click del usuario y llama a la funcion enviar
+     * @param evt
+     */
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
         enviar();
-
     }
 
     /**
@@ -280,6 +302,12 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     private javax.swing.JTextField puerto_destino;
     private javax.swing.JTextField user;
 
+    /**
+     * Actualiza los datos recogidos por los observables
+     * @param o     the observable object.
+     * @param arg   an argument passed to the {@code notifyObservers}
+     *                 method.
+     */
     @Override
     public void update(Observable o, Object arg) {
         this.chat_txt.append((String) arg);
