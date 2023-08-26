@@ -51,6 +51,7 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
         this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
+        this.envio_txt.setText("");
         verify(puerto_destino);
         for (int i = 0; i < Clientes.size(); i++) {
             Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje, this.host.getText()); //Se crea una instancia de la clase cliente
