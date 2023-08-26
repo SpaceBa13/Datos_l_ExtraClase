@@ -20,10 +20,6 @@ public class Servidor extends Observable implements Runnable{
     }
 
 
-    public void add_client(int puerto){
-
-    }
-
     //Se utiliza el metodo run para los hilos
     @Override
     public void run() {
@@ -36,12 +32,8 @@ public class Servidor extends Observable implements Runnable{
             servidor = new ServerSocket(puerto); //inicia el servidor
             while(true){ //Mantiene el socket activo
                 cliente = servidor.accept(); //acepta la coneccion del usuario al Socket servidor
-                System.out.println(cliente);
-                System.out.println("Cliente Conectado");
-                System.out.println("Servidor ; " + cliente.getLocalPort());
                 recibir = new DataInputStream(cliente.getInputStream());  //Se define como la variable que va recibir los datos del socket
                 mensaje = recibir.readUTF(); //define la variable como la lectura de los datos del socket
-
 
                 this.setChanged(); //Marca como modificado al objeto
                 this.notifyObservers(mensaje); //Notifica a los observadores que hubo un cambio en la variable mensaje

@@ -38,11 +38,10 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     public void enviar(){
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
-        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
         this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
         verify(puerto_destino);
         for (int i = 0; i < Clientes.size(); i++) {
-            Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje, puerto_propio); //Se crea una instancia de la clase cliente
+            Cliente usuario = new Cliente(Integer.parseInt(Clientes.get(i).toString()), mensaje); //Se crea una instancia de la clase cliente
             Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
             usuario_hilo.start();//Se inicia el hilo
             System.out.println("Mensaje enviado al puerto: " + Clientes.get(i));
@@ -70,8 +69,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         jScrollPane1 = new javax.swing.JScrollPane();
         chat_txt = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        puerto_salida = new javax.swing.JTextField();
         host = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -103,10 +100,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Puerto Destino");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Puerto Salida");
-
-        puerto_salida.setText("0");
 
         host.setText("0");
         host.addActionListener(new java.awt.event.ActionListener() {
@@ -157,10 +150,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(puerto_salida, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(puerto_destino, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -193,9 +182,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(puerto_salida, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,7 +278,6 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField puerto_destino;
-    private javax.swing.JTextField puerto_salida;
     private javax.swing.JTextField user;
 
     @Override
