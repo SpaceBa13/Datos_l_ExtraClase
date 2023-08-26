@@ -14,16 +14,18 @@ import java.util.logging.Logger;
 public class Cliente implements Runnable{
     int puerto_destino;
     String mensaje;
+    String IP;
 
     /**
      * Crea una instancia del objeto cliente, usando como parametros el puerto de destino y un mensaje
      * @param puerto_destino puerto del servidor al que se conectara el cliente
      * @param mensaje mensaje que sera enviado mediante el socket
      */
-    public Cliente(int puerto_destino, String mensaje){
+    public Cliente(int puerto_destino, String mensaje, String IP){
         //Se
         this.puerto_destino = puerto_destino;
         this.mensaje = mensaje;
+        this.IP = IP;
     }
     /**
      * Mantiene la instancia en ejecuccion
@@ -31,7 +33,6 @@ public class Cliente implements Runnable{
     @Override
     public void run() {
         //Se definen las variables que se van a utilizar para el socket
-        String IP = "127.0.0.1";
         try{
             Socket socket_c = new Socket(IP, puerto_destino); //Creacion del Socket
             DataOutputStream envio = new DataOutputStream(socket_c.getOutputStream()); //Definicion de envio como parte del socket
