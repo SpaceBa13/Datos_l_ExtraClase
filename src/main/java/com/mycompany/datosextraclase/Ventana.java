@@ -64,7 +64,9 @@ public class Ventana extends javax.swing.JFrame implements Observer{
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Puerto Salida");
 
-        puerto_salida.setText("49667");
+        String puerto_salida_str = "49664";
+        int puerto_salida_int = Integer.parseInt(puerto_salida_str);
+        puerto_salida.setText(String.valueOf(puerto_salida_int));
 
         host.setText("0");
         host.addActionListener(new java.awt.event.ActionListener() {
@@ -208,28 +210,32 @@ public class Ventana extends javax.swing.JFrame implements Observer{
     }
 
     private void envio_botonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_envio_botonActionPerformed
-        int puerto_propio = Integer.parseInt(this.puerto_salida.getText());
+        int puerto_salida_int = Integer.parseInt(this.puerto_salida.getText());
         boolean puertoSalidaAbierto = false; // Verificar si el puerto de salida está abierto
+
         try {
-            ServerSocket testSocket = new ServerSocket(puerto_propio);
+            ServerSocket testSocket = new ServerSocket(puerto_salida_int);
             testSocket.close();
             puertoSalidaAbierto = true;
+            puerto_salida_int++; //Incrementa el puerto en 1
+            this.puerto_salida.setText(String.valueOf(puerto_salida_int));
         } catch (IOException e) {
             puertoSalidaAbierto = false; // El puerto no está abierto
         }
+
         if (puertoSalidaAbierto) {
             javax.swing.JOptionPane.showMessageDialog(this, "El puerto de salida no está disponible.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        //Se crea la variable que sera usada para enviar los mensajes, obteniendo el usuario y el texto que se quiere enviar
+        } //Se crea la variable que sera usada para enviar los mensajes, obteniendo el usuario y el texto que se quiere enviar
         String mensaje = this.user.getText() + ": " + this.envio_txt.getText() + "\n";
         int puerto_destino = Integer.parseInt(this.puerto_destino.getText()); //Convierte el texto en un puerto leible por el socket
         this.chat_txt.append(mensaje); //Le anade a la caja de texto del chat, el mensaje que se acaba de enviar
-
         Cliente usuario = new Cliente(puerto_destino, mensaje); //Se crea una instancia de la clase cliente
         Thread usuario_hilo = new Thread(usuario); //Se crea un hilo para ejecutar la instancia
         usuario_hilo.start();//Se inicia el hilo
-        envio_txt.setText("");//Limpia lo escrito 
+
+        envio_txt.setText("");//Limpia lo escrit0
+
     }
 
     /**
